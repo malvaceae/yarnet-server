@@ -1,0 +1,4 @@
+RewriteEngine On
+
+# フロントコントローラの設定を行う。
+RewriteRule ^(.*)$ index.php [QSA,L]
