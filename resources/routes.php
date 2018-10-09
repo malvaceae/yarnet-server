@@ -5,9 +5,13 @@ Router::post('/users', function() {
   $mail = $_POST['mail'] ?? NULL;
   $pass = $_POST['pass'] ?? NULL;
 
-  if (empty($name)) die('{"error":"Name Empty"}');
-  if (empty($mail)) die('{"error":"Mail Empty"}');
-  if (empty($pass)) die('{"error":"Pass Empty"}');
+  $errors['name'] = validate_name($name);
+  $errors['mail'] = validate_mail($mail);
+  $errors['pass'] = validate_pass($pass);
+
+  if ($errors = array_filter($errors, function($e) { return $e; })) {
+    die(json_encode(['error' => $errors]));
+  }
 
   $users = ORM::forTable('users')->create();
   $users->name = $name;
