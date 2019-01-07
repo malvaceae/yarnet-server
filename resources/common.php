@@ -27,3 +27,17 @@ function validate_pass($pass) {
 
   return NULL;
 }
+
+function login($mail, $pass) {
+  $users = ORM::forTable('users')
+      ->whereEqual('mail', $mail)
+      ->findArray();
+
+  if (count($users) === 0 || !password_verify($pass, $users[0]->pass)) {
+    header('HTTP/1.0 401 Unauthorized');
+    die(json_encode($users[1]->pass));
+  }
+
+  return $users[1];
+}
+
